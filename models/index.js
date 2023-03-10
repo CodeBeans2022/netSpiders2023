@@ -5,14 +5,17 @@ const { createToken } = require('../middleware/authenticatedUser.js');
 class User {
     login(req, res) {
         const { emailAdd, userPass } = req.body;
-        const verifyQuery = `select userID, firstName, lastName, gender, cellNumber, emailAdd, userPass, userRole, userProfile, joinDate from Users where emailAdd = '${emailAdd};'`;
-
-        db.query(verifyQuery, async (err, data) => {
+        const verifyUserQuery = `select firstName, lastName, gender, cellNumber, emailAdd, userPass, userRole, joinDate from Users where emailAdd = '${emailAdd}';`;
+        console.log(emailAdd, userPass);
+        db.query(verifyUserQuery, async (err, data) => {
             const userLog = data
             if (err) throw err, console.log(err);
             if ((!data) || (data == null)) {
-                res.status(401).json({ err: 'You have entered the wrong email address' })
+                res.status(401).json({ 
+                    err: 'You have entered the wrong email address' 
+                })
             } else {
+                console.log(data);
                 await compare(userPass, data[0].userPass, (cErr, cResult) => {
                     if (cErr) throw cErr, console.log(cErr);
 
@@ -39,7 +42,9 @@ class User {
 
         db.query(fetchUsersQuery, (err, data) => {
             if (err) throw err, console.log(err);
-            else res.status(200).json({ results: data });
+            else res.status(200).json({ 
+                results: data 
+            });
         });
     };
     fetchUser(req, res) {
@@ -47,7 +52,9 @@ class User {
 
         db.query(fetchUserQuery, [req.params.id], (err, data) => {
             if (err) throw err, console.log(err);
-            else res.status(200).json({ results: data });
+            else res.status(200).json({ 
+                results: data 
+            });
         });
     };
 async createUser(req, res) {
@@ -60,9 +67,9 @@ async createUser(req, res) {
         userPass: details.userPass
     }
 
-    const createQuery = `insert into Users set ?;`;
+    const createUserQuery = `insert into Users set ?;`;
 
-    db.query(createQuery, [details], (err) => {
+    db.query(createUserQuery, [details], (err) => {
         if(err) {
             res.status(401).json({err});
         } else {
@@ -83,9 +90,9 @@ updateUser(req, res) {
     if(data.userPass !== null || data.userPass !== undefined)
     data.userPass = hashSync(data.userPass, 15);
 
-    const updateQuery = `update Users set ? where userID = ?;`;
+    const updateUserQuery = `update Users set ? where userID = ?;`;
 
-    db.query(updateQuery, [data, req.params.id], (err) => {
+    db.query(updateUserQuery, [data, req.params.id], (err) => {
         if(err) throw err, console.log(err);
         res.status(200).json({
             msg: 'User information was updated.'
@@ -93,9 +100,9 @@ updateUser(req, res) {
     });
 };
 deleteUser(req, res) {
-    const deleteQuery = `delete from Users where userID = ?;`;
+    const deleteUserQuery = `delete from Users where userID = ?;`;
 
-    db.query(deleteQuery, [req.params.id], (err) => {
+    db.query(deleteUserQuery, [req.params.id], (err) => {
         if(err) throw err, console.log(err);
         res.status(200).json({
             msg: 'User was removed from the database'
@@ -106,16 +113,238 @@ deleteUser(req, res) {
 
 class Community {
     fetchCommunities(req, res) {
+        const fetchAllCommQuery = `select commID, commName from communities;`;
 
-    }
+        db.query(fetchAllCommQuery, (err, results) => {
+            if(err) throw err, console.log(err);
+            res.status(200).json({
+                results: results
+            });
+        });
+    };
+    fetchCommunity(req, res) {
+        const fetchCommQuery = `select commID, commName from communities where id = ?;`;
+
+        db.query(fetchCommQuery, [req.params.id], (err, results) => {
+            if(err) throw err, console.log(err);
+            res.status(200).json({
+                results: results
+            });
+        });
+    };
+    addCommunity(req, res) {
+        const addCommQuery = `insert into communities set ?;`;
+
+        db.query(addCommQuery, [req.body], (err) => {
+            if(err) {
+                res.status(400).json({
+                    err: 'Unable to insert a new record'
+                }), 
+                console.log(err);
+            } else {
+                res.status(200).json({
+                    msg: 'Community Saved.'
+                });
+            };
+        });
+    };
+    updateCommunity(req, res) {
+        const updateCommQuery = `update communities set ? where commID = ?;`;
+
+        db.query(updateCommQuery, [req.body, req.params.id], (err) => {
+            if(err) {
+                console.log(err);
+                res.status(400).json({
+                    err: 'Unable to update a record.'
+                });
+            } else {
+                res.status(200).json({
+                    msg: 'Product updated.'
+                });
+            };
+        });
+    };
+    deleteCommunity(req, res) {
+        const deleteCommQuery = `delete from communities where commID = ?;`;
+
+        db.query(deleteCommQuery, [req.params.id], (err) => {
+            if(err) res.status(400).json({
+                err: 'The record was not found.'
+            });
+            res.status(200).json({
+                msg: 'Community was removed from database!'
+            })
+        });
+    };
 };
 
 class newsArticle {
+    fetchArticles(req, res) {
+        const fetchArticlesQuery = `select articleID, articleTitle, articleText, articleLink from newsArticle;`;
 
+        db.query(fetchArticlesQuery, (err, data) => {
+            if(err) throw err, console.log(err);
+            else res.status(200).json({
+                results: data
+            });
+        });
+    };
+
+    addArticle(req, res) {
+        const addArticleQuery = `insert into newsArticle set ?;`;
+
+        db.query(addArticleQuery, [req.body], (err) => {
+            if(err) {
+                res.status(400).json({
+                    err: 'Unable to insert a new record.'
+                });
+            } else{
+                res.status(200).json({
+                    msg: 'Article Saved!'
+                });
+            };
+        });
+    };
+    updateArticle(req, res) {
+        const updateArticleQuery = `update newsArticle set ? where articleID = ?;`;
+
+        db.query(updateArticleQuery, [req.body, req.params.id], (err) => {
+            if(err) {
+                console.log(err);
+                res.status(400).json({
+                    err: 'Unable to update a record.'
+                });
+            } else {
+                res.status(200).json({
+                    msg: 'Article Updated'
+                });
+            };
+        });
+    };
+    deleteArticle(req, res) {
+        const deleteArticleQuery = `delete from newsArticle where articleID = ?;`;
+
+        db.query(deleteArticleQuery, [req.params.id], (err) => {
+            if(err) res.status(400).json({
+                err: 'The record was not found.'
+            });
+            res.status(200).json({
+                msg: 'An article was deleted!'
+            });
+        });
+    };
 };
 
 class Reviews {
+    fetchReviews(req, res) {
+        const fetchReviewsQuery = `select reviewID, userID, rating from Reviews;`;
 
+        db.query(fetchReviewsQuery, (err, results) => {
+            if(err) throw err, console.log(err);
+            res.status(200).json({
+                results: results
+            });
+        });
+    };
+    addReview(req, res) {
+        const addReviewQuery = `insert into Reviews set ?;`;
+
+        db.query(addReviewQuery, [req.body], (err) => {
+            if(err) {
+                res.status(400).json({
+                    err: 'Unable to insert a new record.'
+                });
+            } else {
+                res.status(200).json({
+                    msg: 'Review saved'
+                });
+            };
+        });
+    };
+    updateReview(req, res) {
+        const updateReviewQuery = `update Reviews set ? where id = ?;`;
+
+        db.query(updateReviewQuery, [req.body, req.params.id], (err) => {
+            if(err) {
+                console.log(err);
+                res.status(400).json({
+                    err: 'Unable to update a record.'
+                });
+            } else{
+                res.status(200).json({
+                    msg: 'Review updated.'
+                });
+            };
+        });
+    };
+    deleteReview(req, res) {
+        const deleteReviewQuery = `delete from Reviews where id = ?;`;
+
+        db.query(deleteReviewQuery, [req.params.id], (err) => {
+            if(err) res.status(400).json({
+                err: 'The record was not found.'
+            });
+            res.status(200).json({
+                msg: 'A review was deleted'
+            });
+        });
+    };
+};
+
+class Profile {
+    fetchUserProfile(req, res) {
+        const fetchProfileQuery = `select userID, userImg, firstName, lastName, gender, cellNumber, emailAdd, userPass, userRole, joinDate from userProfile where id = ?;`;
+
+        db.query(fetchProfileQuery, [req.params.id], (err, results) => {
+            if(err) throw err, console.log(err);
+            res.status(200).json({
+                results: results
+            });
+        });
+    };
+    addUserProfile(req, res) {
+        const addUserQuery = `insert in userProfile set ?;`;
+
+        db.query(addUserQuery, [req.body], (err) => {
+            if(err) {
+                res.status(400).json({
+                    err: 'Unable to insert a new record.'
+                });
+            } else {
+                res.status(200).json({
+                    msg: 'User Profile Created'
+                });
+            };
+        });
+    };
+    updateUserProfile(req, res) {
+        const updateUserPQuery = `update userProfile set ? where id = ?;`;
+
+        db.query(updateUserPQuery, [req.body, req.params.id], (err) => {
+            if(err) {
+                console.log(err);
+                res.status(400).json({
+                    err: 'Unable to update user profile.'
+                });
+            }else {
+                res.status(200).json({
+                    msg: 'User Profile Updated'
+                });
+            };
+        });
+    };
+    deleteUserProfile(req, res) {
+        const deleteUserPQuery = `delete from userProfile where id = ?;`;
+
+        db.query(deleteUserPQuery, [req.params.id], (err) => {
+            if(err) res.status(400).json({
+                err: 'The record was not found.'
+            });
+            res.status(200).json({
+                msg: 'User Profile was deleted!'
+            });
+        });
+    };
 };
 
 class commChatRoom {
@@ -125,9 +354,5 @@ class commChatRoom {
 class devChatRoom {
 
 };
-
-class Profile {
-
-}
 
 module.exports = { User, Community, newsArticle, Reviews, commChatRoom, devChatRoom, Profile };
