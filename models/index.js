@@ -237,7 +237,7 @@ class newsArticle {
 
 class Reviews {
     fetchReviews(req, res) {
-        const fetchReviewsQuery = `select reviewID, userID, rating from Reviews;`;
+        const fetchReviewsQuery = `select reviewID, userID, rating from Reviews inner join Users using(userID);`;
 
         db.query(fetchReviewsQuery, (err, results) => {
             if(err) throw err, console.log(err);
