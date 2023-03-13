@@ -1,9 +1,20 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link>
-  </nav>
+<div class="gridContainer">
+    <Navbar/>
   <router-view/>
+</div>
 </template>
+
+<script>
+import Navbar from '@/components/Navbar.vue'
+
+export default {
+components: {
+  Navbar
+}
+}
+
+</script>
 
 <style>
 #app {
@@ -12,18 +23,26 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  overflow: hidden;
+  min-height: 100vh;
 }
 
-nav {
-  padding: 30px;
+.gridContainer{
+  display: grid;
+  grid-template-columns: 2fr 9fr;
+  grid-template-rows: 1fr;
+  min-height: 100vh;
 }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+@media screen and (max-width: 760px){
+  .gridContainer{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+  }
 
-nav a.router-link-exact-active {
-  color: #42b983;
+  .nav-background{
+    display: none !important;
+  }
 }
 </style>
