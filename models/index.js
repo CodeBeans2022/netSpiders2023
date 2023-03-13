@@ -38,7 +38,7 @@ class User {
     };
 
     fetchUsers(req, res) {
-        const fetchUsersQuery = `select userID, firstName, lastName, gender, cellNumber, emailAdd, userPass, userRole, joinDate, userImg from Users;`;
+        const fetchUsersQuery = `select userID, firstName, lastName, gender, cellNumber, emailAdd, userPass, userRole, occupation, joinDate, userImg from Users;`;
 
         db.query(fetchUsersQuery, (err, data) => {
             if (err) throw err, console.log(err);
@@ -48,7 +48,7 @@ class User {
         });
     };
     fetchUser(req, res) {
-        const fetchUserQuery = `select userID, firstName, lastName, gender, cellNumber, emailAdd, userPass, userRole, joinDate, userImg from Users where userID = ?;`;
+        const fetchUserQuery = `select userID, firstName, lastName, gender, cellNumber, emailAdd, userPass, userRole, occupation, joinDate, userImg from Users where userID = ?;`;
 
         db.query(fetchUserQuery, [req.params.id], (err, data) => {
             if (err) throw err, console.log(err);
