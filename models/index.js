@@ -411,7 +411,23 @@ class commChatRoom {
 
 };
 
+class commChatMsg {
+
+};
+
+class commChatUsers {
+
+};
+
 class devChatRoom {
+
+};
+
+class devChatMsg {
+
+};
+
+class devChatUsers{
 
 };
 
