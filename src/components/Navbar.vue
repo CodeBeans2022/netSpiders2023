@@ -5,8 +5,8 @@
     <nav class="nav nav-tabs flex-column">
         <router-link class="userNav-link userNav-text-color" to="/userProfile"><i class="fa-sharp fa-solid fa-circle-user"></i>User Profile</router-link>
         <form class="d-flex" role="search">
+          <button class="btn searchBtn" type="submit"><i class="fa-sharp fa-solid fa-magnifying-glass border border-1" style="color: white; padding: 5px; border-radius: 5px;"></i></button>
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-success" type="submit">Search</button>
         </form>
         <router-link class="nav-link nav-text-color" to="/"><i class="fa-sharp fa-solid fa-house"></i> Home</router-link>
         <router-link class="nav-link nav-text-color" to="/about"><i class="fa-sharp fa-solid fa-address-card"></i> About</router-link>
@@ -63,6 +63,15 @@
   background-color: orchid !important;
   color: white;
 } 
+
+.searchBtn:hover{
+  background-color: orchid !important;
+  color: white;
+}
+
+.searchBtn:visited {
+  color: white;
+}
 
 .nav-link:visited {
   color: white;

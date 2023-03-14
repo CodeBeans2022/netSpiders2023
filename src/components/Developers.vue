@@ -8,21 +8,32 @@
                 <div class="row card-body">
                     <div class="col-12">
                         <h1 class="card-title">{{ item.occupation }}</h1>
+                        <div class="row">
+                            <div class="col-6">
+                                <div style="margin-right: 200px;">
+                                <i class="fa-sharp fa-solid fa-person-running m-1 animate__animated animate__fadeInLeft" id="actIconRun"></i>
+                                <i class="fa-sharp fa-solid fa-computer m-1" id="actIcon"></i>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <i class="fa-sharp fa-solid fa-circle-check" id="commIcon" style="margin-left: 180px;"></i>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="col">
-                    <div v-for="item in this.projects" :key="item.projID">
-                        <img class="active-projects" :src="item.projLink" alt="">
-                        <p>{{ item }}</p>
-                    </div>
+                    <div class="col mt-5" id="activeProj">
+                       
+                        <div class="m-3" id="aProjBG" v-for="item in this.projects" :key="item.projID">
+                            <img class="active-projectsImg" :src="item.projLink" alt="">
+                        </div>
                     </div>
 
                     <div class="col">
                         <img id="devImg" :src="item.userImg" alt="">
                     </div>
                     <div class="col">
-                        <img class="active-projects" src="https://i.postimg.cc/TYrzrDhP/My-Bakery.png" alt="">
-                        <img class="active-projects" src="https://i.postimg.cc/KvWxDvkW/Grid-Calculator.png" alt="">
+                        <img class="active-projectsImg" src="https://i.postimg.cc/TYrzrDhP/My-Bakery.png" alt="">
+                        <img class="active-projectsImg" src="https://i.postimg.cc/KvWxDvkW/Grid-Calculator.png" alt="">
                     </div>
 
                     <div class="col-12">
@@ -46,7 +57,6 @@ export default {
             return this.$store.state.users
         },
         projects() {
-            console.log(this.$store.state.activeProjects)
             return this.$store.state.activeProjects
         }
     },
@@ -71,9 +81,38 @@ export default {
     border-radius: 10px;
 }
 
-.active-projects {
+.active-projectsImg {
     height: 300px;
-    width: 400px;
+    width: 300px;
     object-fit: contain;
+}
+
+#activeProj {
+    height: 500px;
+    overflow: scroll;
+    /* box-shadow: 0 8px 32px 0 rgba(42, 10, 80, 0.37); */
+    /* border-radius: 20px; */
+}
+
+#aProjBG{
+    padding: 5px;
+    background-color: rgba(43, 144, 181, 0.136);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(4.5px);
+    -webkit-backdrop-filter: blur(4.5px);
+}
+
+#actIcon{
+    font-size: 30px;
+}
+
+#actIconRun {
+    font-size: 30px;
+}
+
+#commIcon{
+    font-size: 30px;
+    animation: rotate 8s ease 0s infinite forwards;
 }
 </style>
