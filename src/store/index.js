@@ -8,8 +8,7 @@ export default createStore({
     users: null,
     community: null,
     communities: null,
-    developers: null,
-    developer: null,
+    activeProjects: null,
     message: null
   },
   getters: {
@@ -20,6 +19,9 @@ export default createStore({
     },
     setUsers(state, value) {
       state.users = value
+    },
+    setActProj(state, value) {
+      state.activeProjects = value
     },
     setMessage(state, value) {
       state.message = value
@@ -40,6 +42,17 @@ export default createStore({
       const { results, err } = await res.data;
       if (results) {
         context.commit('setUsers', results)
+      }else {
+        context.commit('setMessage', err)
+      }
+    },
+    async fetchActProjects(context) {
+      const res = await axios.get(`${netURL}actProjects`)
+      const {results, err} = await res.data;
+      console.log(res);
+      console.log(err);
+      if(results) {
+        context.commit('setActProj', results)
       }else {
         context.commit('setMessage', err)
       }

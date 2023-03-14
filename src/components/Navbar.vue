@@ -43,7 +43,7 @@
 .nav-tabs {
   width: fit-content;
   height: 65vh;
-  border-radius: 20px;
+  /* border-radius: 10px; */
   margin-top: 0px;
   justify-content: space-around;
   text-decoration: none;
@@ -55,8 +55,8 @@
 .nav-text-color {
   color: white;
   width: 100%;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  /* border-bottom-right-radius: 5px; */
+  /* border-bottom-left-radius: 5px; */
 }
 
 .nav-text-color:hover {
@@ -85,10 +85,10 @@
 .userNav-text-color {
   color: white;
   width: 100%;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  /* border-top-left-radius: 5px; */
+  /* border-top-right-radius: 5px; */
+  /* border-bottom-right-radius: 5px; */
+  /* border-bottom-left-radius: 5px; */
   text-decoration: none;
   padding: 5px;
 }
