@@ -3,12 +3,14 @@ const express = require('express');
 const path = require('path');
 // const bodyParser = require('body-parser');
 const route = express.Router();
-const {User, Community, newsArticle, Reviews, commChatRoom, devChatRoom, Profile} = require('../models');
+const {User, Community, newsArticle, Reviews, commChatRoom, devChatRoom, Profile, actProjects, comProjects} = require('../models');
 const user = new User();
 const community = new Community();
 const profile = new Profile();
 const article = new newsArticle();
 const review = new Reviews();
+const active = new actProjects();
+const comProject = new comProjects();
 const commRoom = new commChatRoom();
 const devRoom = new devChatRoom();
 
@@ -116,6 +118,24 @@ route.put('/profile/:id', bodyParser.json(), (req, res) => {
 
 route.delete('/profile/:id', (req, res) => {
     profile.deleteUserProfile(req, res);
+});
+
+// PROJECT ROUTES
+
+route.get('/actProjects', (req, res) => {
+    active.fetchActProjects(req, res);
+});
+
+route.put('/actProject/:id', bodyParser.json(), (req, res) => {
+    active.updateProject(req, res);
+});
+
+route.post('/projACreate', bodyParser.json(), (req, res) => {
+    active.addActProject(req, res);
+});
+
+route.delete('/actProject/:id', (req, res) => {
+    active.deleteActProject(req, res);
 });
 
 module.exports = route;

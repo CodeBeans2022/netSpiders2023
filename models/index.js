@@ -347,6 +347,66 @@ class Profile {
     };
 };
 
+class actProjects {
+fetchActProjects(req, res) {
+    const fetchProjectsQuery = ` select projID, projName, userID, projLink, inProgress from activeProjects;`;
+
+    db.query(fetchProjectsQuery, (err, data) => {
+        if(err) throw err, console.log(err);
+        else res.status(200).json({results: data});
+    });
+};
+addActProject(req, res) {
+    const addProjectQuery = `insert into activeProjects set ?;`;
+
+    db.query(addProjectQuery, [req.body], (err) => {
+        if(err) {
+            res.status(400).json({
+                err: 'Unable to add active project to database.'
+            });
+        }else {
+            res.status(200).json({
+                msg: 'Project added to database.'
+            });
+        };
+    });
+};
+
+updateProject(req, res) {
+    const updateProjectQuery = `update activeProjects set ? where projID =?;`;
+
+    db.query(updateProjectQuery, [req.body, req.params.id], (err) => {
+        if(err) {
+            console.log(err);
+            res.status(400).json({
+                err: 'Unable to update active project in database.'
+            });
+        }else {
+            res.status(200).json({
+                msg: 'Project was updated.'
+            });
+        };
+    });
+};
+
+deleteActProject(req, res) {
+    const deleteProjectQuery = `delete from activeProjects where projID = ?;`;
+
+    db.query(deleteProjectQuery, [req.params.id], (err) => {
+        if(err) res.status(400).json({
+            err: 'Active Project was not found in database.'
+        });
+        res.status(200).json({
+            msg: 'Active project deleted from database.'
+        });
+    });
+};
+};
+
+class comProjects {
+
+};
+
 class commChatRoom {
 
 };
@@ -355,4 +415,4 @@ class devChatRoom {
 
 };
 
-module.exports = { User, Community, newsArticle, Reviews, commChatRoom, devChatRoom, Profile };
+module.exports = { User, Community, newsArticle, Reviews, commChatRoom, devChatRoom, Profile, actProjects, comProjects };
